@@ -1,73 +1,155 @@
-# Welcome to your Lovable project
+# 🎵 **Harmony Hub --- Full-Stack Music Streaming App**
 
-## Project info
+A modern music-streaming web app built with **React**, **Supabase
+PostgreSQL**, **shadcn/ui**, and **Tailwind CSS**.\
+Upload MP3s, manage playlists, stream audio, and enjoy a clean,
+responsive UI.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+------------------------------------------------------------------------
 
-## How can I edit this code?
+## ✨ **Features**
 
-There are several ways of editing your application.
+-   🔐 **User Authentication**\
+    Email/password login & signup powered by Supabase Auth.
 
-**Use Lovable**
+-   🎵 **MP3 Upload**\
+    Upload MP3 files directly from the browser to Supabase Storage.
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+-   🗄️ **SQL Database**\
+    Structured PostgreSQL tables:
 
-Changes made via Lovable will be committed automatically to this repo.
+    -   `songs`\
+    -   `playlists`\
+    -   `playlist_songs`\
+        With Row-Level Security (RLS) enabled.
 
-**Use your preferred IDE**
+-   🛠️ **CRUD Operations**\
+    Create, update, delete songs and playlists.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+-   ▶️ **Built-in Audio Player**\
+    Custom HTML5 player with:
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+    -   Play / Pause\
+    -   Next / Previous\
+    -   Seek bar\
+    -   Playlist queue
 
-Follow these steps:
+-   🧩 **Drag & Drop Reordering**\
+    Reorder songs inside playlists.
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+-   📱 **Responsive UI**\
+    Fully mobile-friendly using **shadcn/ui** + **Tailwind**.
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+------------------------------------------------------------------------
 
-# Step 3: Install the necessary dependencies.
-npm i
+## 🛠️ **Tech Stack**
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+  Layer        Tools
+  ------------ --------------------------------------------------
+  Frontend     React, TypeScript, Vite, shadcn/ui, Tailwind CSS
+  Backend      Supabase Auth, Supabase Storage, PostgreSQL
+  Audio        Native HTML5 `<audio>`
+  Deployment   Vercel
+
+------------------------------------------------------------------------
+
+## 🗄️ **Database Schema (SQL)**
+
+``` sql
+CREATE TABLE songs (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id uuid REFERENCES auth.users(id) ON DELETE CASCADE,
+  title text NOT NULL,
+  artist text,
+  file_url text NOT NULL,
+  created_at timestamptz DEFAULT now()
+);
+
+CREATE TABLE playlists (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id uuid REFERENCES auth.users(id) ON DELETE CASCADE,
+  name text NOT NULL,
+  created_at timestamptz DEFAULT now()
+);
+
+CREATE TABLE playlist_songs (
+  id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+  playlist_id uuid REFERENCES playlists(id) ON DELETE CASCADE,
+  song_id uuid REFERENCES songs(id) ON DELETE CASCADE,
+  position integer NOT NULL
+);
+```
+
+------------------------------------------------------------------------
+
+## 🚀 **Getting Started (Local Development)**
+
+### 1️⃣ Clone the repo
+
+``` bash
+git clone https://github.com/your-username/harmony-hub
+cd harmony-hub
+```
+
+### 2️⃣ Install dependencies
+
+``` bash
+npm install
+```
+
+### 3️⃣ Create your `.env` file
+
+``` env
+VITE_SUPABASE_URL=
+VITE_SUPABASE_ANON_KEY=
+```
+
+Get the values from **Supabase → Project Settings → API**.
+
+### 4️⃣ Run development server
+
+``` bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+------------------------------------------------------------------------
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## ☁️ **Deployment (Vercel)**
 
-**Use GitHub Codespaces**
+Click the deploy button 🇻🇪:
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+[![Deploy to
+Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository=your-username/harmony-hub)
 
-## What technologies are used for this project?
+Make sure to set your Supabase environment variables in the Vercel
+dashboard.
 
-This project is built with:
+------------------------------------------------------------------------
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## 📦 **Project Structure**
 
-## How can I deploy this project?
+    src/
+     ├── components/
+     ├── hooks/
+     ├── lib/
+     ├── pages/
+     ├── store/
+     └── utils/
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+------------------------------------------------------------------------
 
-## Can I connect a custom domain to my Lovable project?
+## 🤝 **Contributing**
 
-Yes, you can!
+Pull requests are welcome!\
+If submitting a new feature, please include:
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+-   A clear description\
+-   Relevant screenshots\
+-   Any new API endpoints or DB schema changes
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+------------------------------------------------------------------------
+
+## 📜 **License**
+
+MIT License.\
+You may use, modify, and deploy the project freely.
