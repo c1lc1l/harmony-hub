@@ -11,6 +11,8 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
+import { UploadSongDialog } from './UploadSongDialog';
+import { useAuth } from '@/contexts/AuthContext';
 
 const formatDuration = (seconds: number) => {
   const mins = Math.floor(seconds / 60);
@@ -23,6 +25,7 @@ export const SongList: React.FC = () => {
   const { data: playlists } = usePlaylists();
   const { currentSong, isPlaying, playSong, playPlaylist, togglePlay } = usePlayer();
   const addSongToPlaylist = useAddSongToPlaylist();
+  const { user } = useAuth();
 
   const handlePlaySong = (song: Song, index: number) => {
     if (currentSong?.id === song.id) {
@@ -47,15 +50,18 @@ export const SongList: React.FC = () => {
           <h1 className="text-3xl font-bold text-foreground">Library</h1>
           <p className="text-muted-foreground mt-1">{songs?.length || 0} songs</p>
         </div>
-        {songs && songs.length > 0 && (
-          <Button
-            onClick={() => playPlaylist(songs)}
-            className="btn-primary rounded-full px-6"
-          >
-            <Play className="w-4 h-4 mr-2" />
-            Play All
-          </Button>
-        )}
+        <div className="flex items-center gap-3">
+          {user && <UploadSongDialog />}
+          {songs && songs.length > 0 && (
+            <Button
+              onClick={() => playPlaylist(songs)}
+              className="btn-primary rounded-full px-6"
+            >
+              <Play className="w-4 h-4 mr-2" />
+              Play All
+            </Button>
+          )}
+        </div>
       </div>
 
       {/* Songs table */}
